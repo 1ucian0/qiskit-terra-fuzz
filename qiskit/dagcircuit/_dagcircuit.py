@@ -268,9 +268,6 @@ class DAGCircuit:
         # Add a new operation node to the graph
         self._max_node_id += 1
         self.multi_graph.add_node(self._max_node_id)
-        # Update the operation itself. TODO: remove after qargs not connected to op
-        op.qargs = qargs
-        op.cargs = cargs
         # Update that operation node's data
         self.multi_graph.node[self._max_node_id]["type"] = "op"
         self.multi_graph.node[self._max_node_id]["op"] = op
@@ -279,9 +276,8 @@ class DAGCircuit:
         self.multi_graph.node[self._max_node_id]["cargs"] = cargs
         self.multi_graph.node[self._max_node_id]["condition"] = condition
 
-    def apply_operation_back(self, op, qargs=None, cargs=None, condition=None):
+    def apply_operation_back(self, op, qargs, cargs, condition=None):
         """Apply an operation to the output of the circuit.
-        TODO: make `qargs` and `cargs` mandatory, when they are dropped from op.
 
         Args:
             op (Instruction): the operation associated with the DAG node
@@ -296,8 +292,8 @@ class DAGCircuit:
             DAGCircuitError: if a leaf node is connected to multiple outputs
 
         """
-        qargs = qargs or op.qargs
-        cargs = cargs or op.cargs
+        qargs = qargs
+        cargs = cargs
         all_cbits = self._bits_in_condition(condition)
         all_cbits.extend(cargs)
 
@@ -324,9 +320,8 @@ class DAGCircuit:
 
         return self._max_node_id
 
-    def apply_operation_front(self, op, qargs=None, cargs=None, condition=None):
+    def apply_operation_front(self, op, qargs, cargs, condition=None):
         """Apply an operation to the input of the circuit.
-        TODO: make `qargs` and `cargs` mandatory, when they are dropped from op.
 
         Args:
             op (Instruction): the operation associated with the DAG node
@@ -340,8 +335,8 @@ class DAGCircuit:
         Raises:
             DAGCircuitError: if initial nodes connected to multiple out edges
         """
-        qargs = qargs or op.qargs
-        cargs = cargs or op.cargs
+        qargs = qargs
+        cargs = cargs
         all_cbits = self._bits_in_condition(condition)
         all_cbits.extend(cargs)
 
@@ -895,7 +890,7 @@ class DAGCircuit:
             for n in input_dag.op_nodes():
                 input_dag._remove_op_node(n)
             for n in to_replay:
-                input_dag.apply_operation_back(n["op"], condition=condition)
+                input_dag.apply_operation_back(n["op"], n["qargs"], n["cargs"], condition=condition)
 
         if wires is None:
             qwires = [w for w in input_dag.wires if isinstance(w[0], QuantumRegister)]
