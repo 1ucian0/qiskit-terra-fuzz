@@ -53,7 +53,7 @@ class BarrierBeforeFinalMeasurements(TransformationPass):
         final_qubits = set(dag.node(final_op)['qargs'][0]
                            for final_op in final_ops)
 
-        new_barrier_id = barrier_layer.apply_operation_back(Barrier(qubits=final_qubits))
+        new_barrier_id = barrier_layer.apply_operation_back(Barrier(), final_qubits, [])
 
         # Preserve order of final ops collected earlier from the original DAG.
         ordered_node_ids = [node_id for node_id in dag.node_nums_in_topological_order()
@@ -62,7 +62,7 @@ class BarrierBeforeFinalMeasurements(TransformationPass):
 
         # Move final ops to the new layer and append the new layer to the DAG.
         for final_node in ordered_final_nodes:
-            barrier_layer.apply_operation_back(final_node['op'])
+            barrier_layer.apply_operation_back(final_node['op'], final_node['qargs'], final_node['cargs'])
 
         for final_op in final_ops:
             dag._remove_op_node(final_op)
