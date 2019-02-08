@@ -292,8 +292,6 @@ class DAGCircuit:
             DAGCircuitError: if a leaf node is connected to multiple outputs
 
         """
-        qargs = qargs
-        cargs = cargs
         all_cbits = self._bits_in_condition(condition)
         all_cbits.extend(cargs)
 
@@ -335,8 +333,6 @@ class DAGCircuit:
         Raises:
             DAGCircuitError: if initial nodes connected to multiple out edges
         """
-        qargs = qargs
-        cargs = cargs
         all_cbits = self._bits_in_condition(condition)
         all_cbits.extend(cargs)
 
