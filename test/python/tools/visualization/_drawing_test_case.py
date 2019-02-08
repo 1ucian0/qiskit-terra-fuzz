@@ -43,7 +43,7 @@ class DrawingTestCase(QiskitTestCase):
             self.assertEqual(cur.read(), exp.read(), msg='{} file differs from {}'.format(current,
                                                                                           expected))
 
-    def assertImagesAreEqual(self, current, expected, diff_tolerance=0.001):
+    def assertImagesAreEqual(self, current, expected, diff_tolerance=0.005):
         """
         Checks if both images are similar enough to be considered equal.
         Similarity is controlled with the ```diff_tolerance``` argument.
