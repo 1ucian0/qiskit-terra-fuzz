@@ -293,5 +293,5 @@ def _swap_ops_from_edge(edge, layout):
     device_qreg = QuantumRegister(len(layout.get_physical_bits()), 'q')
     qreg_edge = [(device_qreg, i) for i in edge]
     return [
-        {'op': SwapGate(*qreg_edge), 'qargs': qreg_edge},
+        {'op': SwapGate(), 'qargs': qreg_edge, 'cargs': []},
     ]

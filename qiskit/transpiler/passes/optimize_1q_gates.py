@@ -163,7 +163,7 @@ class Optimize1qGates(TransformationPass):
                     right_name = "nop"
 
             # Replace the data of the first node in the run
-            new_op = Instruction("", [], [], [])
+            new_op = Instruction("", [])
             if right_name == "u1":
                 new_op = U1Gate(right_parameters[2], run_qarg)
             if right_name == "u2":

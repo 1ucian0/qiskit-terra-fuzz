@@ -90,7 +90,7 @@ class BarrierBeforeFinalMeasurements(TransformationPass):
             ):
                 merge_barrier_qubits = (our_qubits | their_qubits)
                 merge_barrier_id = barrier_layer.apply_operation_front(
-                        Barrier(), merge_barrier_qubits, [])
+                    Barrier(), merge_barrier_qubits, [])
 
                 our_ancestors = our_ancestors | their_ancestors
                 our_descendants = our_descendants | their_descendants
