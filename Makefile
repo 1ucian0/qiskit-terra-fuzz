@@ -36,6 +36,9 @@ test_recording:
 test_ci:
 	stestr run --concurrency 2
 
+property_based_test:
+	python3 -m unittest discover -s test.property_based -v
+
 profile:
 	python3 -m unittest discover -p "profile*.py" -v
 
