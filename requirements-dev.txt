@@ -12,3 +12,4 @@ vcrpy
 PyGithub
 wheel
 hypothesis
+cython>=0.27.1
