@@ -24,7 +24,7 @@ style:
 # Use the -s (starting directory) flag for "unittest discover" is necessary,
 # otherwise the QuantumCircuit header will be modified during the discovery.
 test:
-	python3 -m unittest discover -s test -v
+	python3 -m unittest discover -s test.python -v
 
 test_mock:
 	env QISKIT_TESTS=mock_online python3 -m unittest discover -s test -v
