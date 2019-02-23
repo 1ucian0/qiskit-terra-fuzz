@@ -612,17 +612,6 @@ class TestCompiler(QiskitTestCase):
                                    for after_measure in out_dag.quantum_successors(n)])
             self.assertTrue(is_last_measure)
 
-    def test_kak_decomposition(self):
-        """Verify KAK decomposition for random Haar unitaries.
-        """
-        for _ in range(100):
-            unitary = random_unitary_matrix(4)
-            with self.subTest(unitary=unitary):
-                try:
-                    two_qubit_kak(unitary, verify_gate_sequence=True)
-                except MapperError as ex:
-                    self.fail(str(ex))
-
     barrier_pass = BarrierBeforeFinalMeasurements()
 
     @patch.object(BarrierBeforeFinalMeasurements, 'run', wraps=barrier_pass.run)

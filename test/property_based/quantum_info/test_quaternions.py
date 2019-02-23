@@ -1,53 +1,79 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2017, IBM.
+# Copyright 2019, IBM.
 #
 # This source code is licensed under the Apache License, Version 2.0 found in
 # the LICENSE.txt file in the root directory of this source tree.
 
-"""Tests quaternion conversion"""
+"""Property-based tests quaternion conversion"""
 
 import math
 import numpy as np
 import scipy.linalg as la
+from hypothesis import given, settings
+from hypothesis.strategies import floats, integers
+from hypothesis.extra.numpy import arrays
 
 from qiskit.quantum_info.operators.quaternion import quaternion_from_euler
 from qiskit.test import QiskitTestCase
+
+settings.register_profile("default", max_examples=1000)
+settings.load_profile("default")
 
 
 class TestQuaternions(QiskitTestCase):
     """Tests qiskit.quantum_info.operators.quaternion"""
 
-    def setUp(self):
-        axes = ['x', 'y', 'z']
-        rnd = np.array([-0.92545003, -2.19985357, 6.01761209])
-        idx = np.array([0, 2, 1])
-        self.mat1 = rotation_matrix(rnd[0], axes[idx[0]]).dot(
+    @given(arrays(np.float, 3, elements=floats(-0.5, 0.5)),
+           arrays(np.int, 3, elements=integers(0, 2)))
+    def test_random_euler(self, random_float_array, random_int_array):
+        """Quaternion from random Euler rotations."""
+        # Random angles and axes
+        axes = {0: 'x', 1: 'y', 2: 'z'}
+        rnd = 4 * np.pi * random_float_array
+        idx = random_int_array
+        mat1 = rotation_matrix(rnd[0], axes[idx[0]]).dot(
             rotation_matrix(rnd[1], axes[idx[1]]).dot(
                 rotation_matrix(rnd[2], axes[idx[2]])))
         axes_str = ''.join(axes[i] for i in idx)
         quat = quaternion_from_euler(rnd, axes_str)
-        self.mat2 = quat.to_matrix()
+        mat2 = quat.to_matrix()
+        self.assertTrue(np.allclose(mat1, mat2))
 
-    def test_random_euler(self):
-        """Quaternion from Euler rotations."""
-        self.assertTrue(np.allclose(self.mat1, self.mat2))
-
-    def test_orthogonality(self):
+    @given(arrays(np.float, 3, elements=floats(-0.5, 0.5)),
+           arrays(np.int, 3, elements=integers(0, 2)))
+    def test_orthogonality(self, random_float_array, random_int_array):
         """Quaternion rotation matrix orthogonality"""
-        self.assertTrue(np.allclose(self.mat2.dot(self.mat2.T), np.identity(3, dtype=float)))
+        # Check orthogonality of generated rotation matrix
+        axes = {0: 'x', 1: 'y', 2: 'z'}
+        rnd = 4 * np.pi * random_float_array
+        idx = random_int_array
+        axes_str = ''.join(axes[i] for i in idx)
+        quat = quaternion_from_euler(rnd, axes_str)
+        mat = quat.to_matrix()
+        self.assertTrue(np.allclose(mat.dot(mat.T), np.identity(3, dtype=float)))
 
-    def test_det(self):
+    @given(arrays(np.float, 3, elements=floats(-0.5, 0.5)),
+           arrays(np.int, 3, elements=integers(0, 2)))
+    def test_det(self, random_float_array, random_int_array):
         """Quaternion det = 1"""
-        self.assertTrue(np.allclose(la.det(self.mat2), 1))
+        # Check det for rotation and not reflection
+        axes = {0: 'x', 1: 'y', 2: 'z'}
+        rnd = 4 * np.pi * random_float_array
+        idx = random_int_array
+        axes_str = ''.join(axes[i] for i in idx)
+        quat = quaternion_from_euler(rnd, axes_str)
+        mat = quat.to_matrix()
+        self.assertTrue(np.allclose(la.det(mat), 1))
 
-    def test_equiv_quaternions(self):
+    @given(arrays(np.float, 3, elements=floats(-0.5, 0.5)))
+    def test_equiv_quaternions(self, random_float_array):
         """Different Euler rotations give same quaternion, up to sign."""
         # Check if euler angles from to_zyz return same quaternion
         # up to a sign (2pi rotation)
         rot = ['xyz', 'xyx', 'xzy', 'xzx', 'yzx', 'yzy', 'yxz', 'yxy', 'zxy', 'zxz', 'zyx', 'zyz']
         for value in rot:
-            rnd = np.array([-1.57657536, 5.66384302, 2.91532185])
+            rnd = 4 * np.pi * random_float_array
             quat1 = quaternion_from_euler(rnd, value)
             euler = quat1.to_zyz()
             quat2 = quaternion_from_euler(euler, 'zyz')
