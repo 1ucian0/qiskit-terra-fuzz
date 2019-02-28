@@ -17,8 +17,8 @@ from qiskit.mapper import MapperError
 from qiskit.extensions.standard.u1 import U1Gate
 from qiskit.extensions.standard.u2 import U2Gate
 from qiskit.extensions.standard.u3 import U3Gate
-from qiskit.circuit.instruction import Instruction
-from qiskit.transpiler.basepasses import TransformationPass
+from qiskit.circuit.gate import Gate
+from qiskit.transpiler._basepasses import TransformationPass
 from qiskit.quantum_info.operators.quaternion import quaternion_from_euler
 from qiskit.transpiler.passes.unroller import Unroller
 
@@ -163,7 +163,7 @@ class Optimize1qGates(TransformationPass):
                     right_name = "nop"
 
             # Replace the data of the first node in the run
-            new_op = Instruction("", [])
+            new_op = Gate(name="", num_qubits=1, params=[])
             if right_name == "u1":
                 new_op = U1Gate(right_parameters[2], run_qarg)
             if right_name == "u2":
