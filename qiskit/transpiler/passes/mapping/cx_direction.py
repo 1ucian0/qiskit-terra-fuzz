@@ -66,8 +66,8 @@ class CXDirection(TransformationPass):
 
             for cnot_id in subdag.named_nodes('cx', 'CX'):
                 cnot_node = subdag.node(cnot_id)
-                control = cnot_node['qargs']
-                target = cnot_node['qargs']
+                control = cnot_node['qargs'][0]
+                target = cnot_node['qargs'][1]
 
                 physical_q0 = self.layout[control]
                 physical_q1 = self.layout[target]
