@@ -29,6 +29,7 @@ class DrawElement():
         self.bot_connector = {}
         self.top_connector = {}
         self.right_fill = self.left_fill = 0
+        self.wire_label = ""
 
     @property
     def top(self):
@@ -68,7 +69,6 @@ class DrawElement():
     @property
     def length(self):
         """ Returns the length of the element, including the box around."""
-
         return max(len(self.top), len(self.mid), len(self.bot))
 
     @length.setter
@@ -205,8 +205,11 @@ class BoxOnQuWireTop(MultiBox, BoxOnQuWire):
 
     def __init__(self, label="", top_connect=None):
         super().__init__(label)
+        self.wire_label = '10'
         self.mid_content = ""  # The label will be put by some other part of the box.
-        self.bot_format = "│ %s │"
+        self.top_format = "┌───%s─┐"
+        self.mid_format = "┤10 %s ├"
+        self.bot_format = "│   %s │"
         self.top_connect = top_connect if top_connect else '─'
         self.bot_connect = self.bot_pad = " "
 
@@ -216,8 +219,10 @@ class BoxOnQuWireMid(MultiBox, BoxOnQuWire):
 
     def __init__(self, label, input_length, order):
         super().__init__(label)
-        self.top_format = "│ %s │"
-        self.bot_format = "│ %s │"
+        self.wire_label = '10'
+        self.top_format = "│   %s │"
+        self.mid_format = "┤10 %s ├"
+        self.bot_format = "│   %s │"
         self.top_pad = self.bot_pad = self.top_connect = self.bot_connect = " "
         self.center_label(input_length, order)
 
@@ -227,7 +232,10 @@ class BoxOnQuWireBot(MultiBox, BoxOnQuWire):
 
     def __init__(self, label, input_length, bot_connect='─'):
         super().__init__(label)
-        self.top_format = "│ %s │"
+        self.wire_label = '10'
+        self.top_format = "│   %s │"
+        self.mid_format = "┤10 %s ├"
+        self.bot_format = "└───%s─┘"
         self.top_pad = " "
         self.bot_connect = bot_connect
 
