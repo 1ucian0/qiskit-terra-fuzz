@@ -232,7 +232,7 @@ class BoxOnQuWireBot(MultiBox, BoxOnQuWire):
 
     def __init__(self, label, input_length, bot_connect='─'):
         super().__init__(label)
-        self.wire_label = '10'
+        self.wire_label = '9'
         self.top_pad = " "
         self.top_format = "│{} %s │".format(self.top_pad * len(self.wire_label))
         self.mid_format = "┤{} %s ├".format(self.wire_label)
