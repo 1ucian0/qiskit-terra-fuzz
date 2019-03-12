@@ -206,12 +206,12 @@ class BoxOnQuWireTop(MultiBox, BoxOnQuWire):
     def __init__(self, label="", top_connect=None):
         super().__init__(label)
         self.wire_label = '10'
-        self.mid_content = ""  # The label will be put by some other part of the box.
-        self.top_format = "┌───%s─┐"
-        self.mid_format = "┤10 %s ├"
-        self.bot_format = "│   %s │"
-        self.top_connect = top_connect if top_connect else '─'
         self.bot_connect = self.bot_pad = " "
+        self.mid_content = ""  # The label will be put by some other part of the box.
+        self.top_format = "┌{}─%s─┐".format(self.top_pad * len(self.wire_label))
+        self.mid_format = "┤{} %s ├".format(self.wire_label)
+        self.bot_format = "│{} %s │".format(self.bot_pad * len(self.wire_label))
+        self.top_connect = top_connect if top_connect else '─'
 
 
 class BoxOnQuWireMid(MultiBox, BoxOnQuWire):
@@ -219,11 +219,11 @@ class BoxOnQuWireMid(MultiBox, BoxOnQuWire):
 
     def __init__(self, label, input_length, order):
         super().__init__(label)
-        self.wire_label = '10'
-        self.top_format = "│   %s │"
-        self.mid_format = "┤10 %s ├"
-        self.bot_format = "│   %s │"
         self.top_pad = self.bot_pad = self.top_connect = self.bot_connect = " "
+        self.wire_label = '10'
+        self.top_format = "│{} %s │".format(self.top_pad * len(self.wire_label))
+        self.mid_format = "┤{} %s ├".format(self.wire_label)
+        self.bot_format = "│{} %s │".format(self.bot_pad * len(self.wire_label))
         self.center_label(input_length, order)
 
 
@@ -233,10 +233,10 @@ class BoxOnQuWireBot(MultiBox, BoxOnQuWire):
     def __init__(self, label, input_length, bot_connect='─'):
         super().__init__(label)
         self.wire_label = '10'
-        self.top_format = "│   %s │"
-        self.mid_format = "┤10 %s ├"
-        self.bot_format = "└───%s─┘"
         self.top_pad = " "
+        self.top_format = "│{} %s │".format(self.top_pad * len(self.wire_label))
+        self.mid_format = "┤{} %s ├".format(self.wire_label)
+        self.bot_format = "└{}─%s─┘".format(self.bot_pad * len(self.wire_label))
         self.bot_connect = bot_connect
 
         self.mid_content = self.top_connect = ""
