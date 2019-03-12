@@ -203,9 +203,9 @@ class MultiBox(DrawElement):
 class BoxOnQuWireTop(MultiBox, BoxOnQuWire):
     """ Draws the top part of a box that affects more than one quantum wire"""
 
-    def __init__(self, label="", top_connect=None):
+    def __init__(self, label="", top_connect=None, wire_label=""):
         super().__init__(label)
-        self.wire_label = '10'
+        self.wire_label = wire_label
         self.bot_connect = self.bot_pad = " "
         self.mid_content = ""  # The label will be put by some other part of the box.
         self.top_format = "┌{}─%s─┐".format(self.top_pad * len(self.wire_label))
@@ -217,10 +217,10 @@ class BoxOnQuWireTop(MultiBox, BoxOnQuWire):
 class BoxOnQuWireMid(MultiBox, BoxOnQuWire):
     """ Draws the middle part of a box that affects more than one quantum wire"""
 
-    def __init__(self, label, input_length, order):
+    def __init__(self, label, input_length, order, wire_label=""):
         super().__init__(label)
         self.top_pad = self.bot_pad = self.top_connect = self.bot_connect = " "
-        self.wire_label = '10'
+        self.wire_label = wire_label
         self.top_format = "│{} %s │".format(self.top_pad * len(self.wire_label))
         self.mid_format = "┤{} %s ├".format(self.wire_label)
         self.bot_format = "│{} %s │".format(self.bot_pad * len(self.wire_label))
@@ -230,9 +230,9 @@ class BoxOnQuWireMid(MultiBox, BoxOnQuWire):
 class BoxOnQuWireBot(MultiBox, BoxOnQuWire):
     """ Draws the bottom part of a box that affects more than one quantum wire"""
 
-    def __init__(self, label, input_length, bot_connect='─'):
+    def __init__(self, label, input_length, bot_connect='─', wire_label=""):
         super().__init__(label)
-        self.wire_label = '9'
+        self.wire_label = wire_label
         self.top_pad = " "
         self.top_format = "│{} %s │".format(self.top_pad * len(self.wire_label))
         self.mid_format = "┤{} %s ├".format(self.wire_label)
