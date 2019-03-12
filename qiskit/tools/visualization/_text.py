@@ -218,6 +218,7 @@ class BoxOnQuWireMid(MultiBox, BoxOnQuWire):
         super().__init__(label)
         self.top_format = "│ %s │"
         self.bot_format = "│ %s │"
+        self.top_pad = self.bot_pad = self.top_connect = self.bot_connect = " "
         self.center_label(input_length, order)
 
 
