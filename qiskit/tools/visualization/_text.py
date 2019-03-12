@@ -772,7 +772,11 @@ class TextDrawing():
 
         elif len(instruction['qargs']) >= 2 and not instruction['cargs']:
             # multiple qubit gate
-            layer.set_qu_multibox(instruction['qargs'], TextDrawing.label_for_box(instruction))
+            label = instruction['name']
+            params = TextDrawing.params_for_label(instruction)
+            if params:
+                label += "(%s)" % ','.join(params)
+            layer.set_qu_multibox(instruction['qargs'], label)
 
         else:
             raise VisualizationError(
@@ -862,6 +866,7 @@ class Layer:
             BoxOnWireBot = BoxOnClWireBot
         elif wire_type == "qu":
             bit_index = sorted([i for i, x in enumerate(self.qregs) if x in bits])
+            qargs = [str(sorted(self.qregs).index(qbit)) for qbit in bits]
             bits.sort(key=self.qregs.index)
             set_bit = self.set_qubit
             BoxOnWire = BoxOnQuWire
@@ -871,18 +876,14 @@ class Layer:
         else:
             raise VisualizationError("_set_multibox only supports 'cl' and 'qu' as wire types.")
 
-        # Checks if bits are consecutive
-        if bit_index != [i for i in range(bit_index[0], bit_index[-1] + 1)]:
-            raise VisualizationError("Text visualizaer does know how to build a gate with multiple"
-                                     "bits when they are not adjacent to each other")
-
         if len(bit_index) == 1:
             set_bit(bits[0], BoxOnWire(label, top_connect=top_connect))
         else:
-            set_bit(bits[0], BoxOnWireTop(label, top_connect=top_connect))
+            set_bit(bits[0], BoxOnWireTop(label, top_connect=top_connect, wire_label=qargs[0]))
             for order, bit in enumerate(bits[1:-1], 1):
-                set_bit(bit, BoxOnWireMid(label, len(bit_index), order))
-            set_bit(bits[-1], BoxOnWireBot(label, len(bit_index)))
+                qarg = ""
+                set_bit(bit, BoxOnWireMid(label, len(bit_index), order, wire_label=qarg))
+            set_bit(bits[-1], BoxOnWireBot(label, len(bit_index), wire_label=qargs[-1]))
 
     def set_cl_multibox(self, creg, label, top_connect='┴'):
         """

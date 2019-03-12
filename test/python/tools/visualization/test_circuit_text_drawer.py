@@ -17,6 +17,7 @@ from qiskit.tools.visualization import _text as elements
 from qiskit.tools.visualization._circuit_visualization import \
     _text_circuit_drawer
 from qiskit.test import QiskitTestCase
+from qiskit.circuit import Gate
 
 
 class TestTextDrawerElement(QiskitTestCase):
@@ -848,6 +849,42 @@ class TestTextDrawerGatesInCircuit(QiskitTestCase):
         circuit.x(qr1[0])
         circuit.measure(qr1[1], cr1[1])
         self.assertEqual(str(_text_circuit_drawer(circuit, justify='right')), expected)
+
+
+class TestTextDrawerMultiQGates(QiskitTestCase):
+    """ Gates impling multiple qubits."""
+
+    def test_2gate(self):
+        """ 2Q no params. """
+        expected = '\n'.join(["        ┌───────┐",
+                              "q_1: |0>┤0      ├",
+                              "        │  twoQ │",
+                              "q_0: |0>┤1      ├",
+                              "        └───────┘"])
+
+        qr = QuantumRegister(2, 'q')
+        circuit = QuantumCircuit(qr)
+
+        my_gate2 = Gate(name='twoQ', num_qubits=2, params=[])
+        circuit.append(my_gate2, [qr[0], qr[1]])
+
+        self.assertEqual(str(_text_circuit_drawer(circuit, reverse_bits=True)), expected)
+
+    def test_2gate_cross_wires(self):
+        """ 2Q no params, with cross wires """
+        expected = '\n'.join(["        ┌───────┐",
+                              "q_1: |0>┤1      ├",
+                              "        │  twoQ │",
+                              "q_0: |0>┤0      ├",
+                              "        └───────┘"])
+
+        qr = QuantumRegister(2, 'q')
+        circuit = QuantumCircuit(qr)
+
+        my_gate2 = Gate(name='twoQ', num_qubits=2, params=[])
+        circuit.append(my_gate2, [qr[1], qr[0]])
+
+        self.assertEqual(str(_text_circuit_drawer(circuit, reverse_bits=True)), expected)
 
 
 if __name__ == '__main__':
