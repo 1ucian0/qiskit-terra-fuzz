@@ -876,7 +876,7 @@ class Layer:
             BoxOnWireBot = BoxOnClWireBot
         elif wire_type == "qu":
             bit_index = sorted([i for i, x in enumerate(self.qregs) if x in bits])
-            qargs = [str(sorted(self.qregs).index(qbit)) for qbit in bits]
+            qargs = [str(bits.index(qbit)) for qbit in self.qregs if qbit in bits]
             bits.sort(key=self.qregs.index)
             set_bit = self.set_qubit
             BoxOnWire = BoxOnQuWire

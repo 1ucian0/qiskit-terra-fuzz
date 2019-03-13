@@ -857,9 +857,9 @@ class TestTextDrawerMultiQGates(QiskitTestCase):
     def test_2Qgate(self):
         """ 2Q no params. """
         expected = '\n'.join(["        ┌───────┐",
-                              "q_1: |0>┤0      ├",
+                              "q_1: |0>┤1      ├",
                               "        │  twoQ │",
-                              "q_0: |0>┤1      ├",
+                              "q_0: |0>┤0      ├",
                               "        └───────┘"])
 
         qr = QuantumRegister(2, 'q')
@@ -873,9 +873,9 @@ class TestTextDrawerMultiQGates(QiskitTestCase):
     def test_2Qgate_cross_wires(self):
         """ 2Q no params, with cross wires """
         expected = '\n'.join(["        ┌───────┐",
-                              "q_1: |0>┤1      ├",
+                              "q_1: |0>┤0      ├",
                               "        │  twoQ │",
-                              "q_0: |0>┤0      ├",
+                              "q_0: |0>┤1      ├",
                               "        └───────┘"])
 
         qr = QuantumRegister(2, 'q')
@@ -891,9 +891,9 @@ class TestTextDrawerMultiQGates(QiskitTestCase):
         expected = '\n'.join(["        ┌─────────┐",
                               "q_2: |0>┤1        ├",
                               "        │         │",
-                              "q_1: |0>┤2 threeQ ├",
+                              "q_1: |0>┤0 threeQ ├",
                               "        │         │",
-                              "q_0: |0>┤0        ├",
+                              "q_0: |0>┤2        ├",
                               "        └─────────┘"])
 
         qr = QuantumRegister(3, 'q')
