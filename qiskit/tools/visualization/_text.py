@@ -189,7 +189,7 @@ class MultiBox(DrawElement):
             order (int): Which middle element is this one?
         """
         location_in_the_box = '*'.center(input_length * 2 - 1).index('*') + 1
-        top_limit = (order - 1) * 2 + 2
+        top_limit = order * 2 + 2
         bot_limit = top_limit + 2
         if top_limit <= location_in_the_box < bot_limit:
             if location_in_the_box == top_limit:
@@ -889,10 +889,10 @@ class Layer:
         if len(bit_index) == 1:
             set_bit(bits[0], BoxOnWire(label, top_connect=top_connect))
         else:
-            set_bit(bits[0], BoxOnWireTop(label, top_connect=top_connect, wire_label=qargs.pop(0)))
-            for order, bit in enumerate(bits[1:-1], 1):
-                set_bit(bit, BoxOnWireMid(label, len(bit_index), order, wire_label=qargs.pop(0)))
-            set_bit(bits[-1], BoxOnWireBot(label, len(bit_index), wire_label=qargs.pop(0)))
+            set_bit(bits.pop(0), BoxOnWireTop(label, top_connect=top_connect, wire_label=qargs.pop(0)))
+            for order in range(len(bits[:-1])):
+                set_bit(bits.pop(0), BoxOnWireMid(label, len(bit_index), order, wire_label=qargs.pop(0)))
+            set_bit(bits.pop(0), BoxOnWireBot(label, len(bit_index), wire_label=qargs.pop(0)))
 
     def set_cl_multibox(self, creg, label, top_connect='┴'):
         """
