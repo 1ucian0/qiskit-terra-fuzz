@@ -906,7 +906,13 @@ class TestTextDrawerMultiQGates(QiskitTestCase):
 
     def test_2Qgate_nottogether(self):
         """ 2Q that are not together """
-        expected = '\n'.join([''])
+        expected = '\n'.join(["        ┌──────┐",
+                              "q_2: |0>┤1     ├",
+                              "        │      │",
+                              "q_1: |0>┤ twoQ ├",
+                              "        │      │",
+                              "q_0: |0>┤0     ├",
+                              "        └──────┘"])
 
         qr = QuantumRegister(3, 'q')
         circuit = QuantumCircuit(qr)
