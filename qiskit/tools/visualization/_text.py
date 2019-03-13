@@ -889,11 +889,10 @@ class Layer:
         if len(bit_index) == 1:
             set_bit(bits[0], BoxOnWire(label, top_connect=top_connect))
         else:
-            set_bit(bits[0], BoxOnWireTop(label, top_connect=top_connect, wire_label=qargs[0]))
+            set_bit(bits[0], BoxOnWireTop(label, top_connect=top_connect, wire_label=qargs.pop(0)))
             for order, bit in enumerate(bits[1:-1], 1):
-                qarg = ""
-                set_bit(bit, BoxOnWireMid(label, len(bit_index), order, wire_label=qarg))
-            set_bit(bits[-1], BoxOnWireBot(label, len(bit_index), wire_label=qargs[-1]))
+                set_bit(bit, BoxOnWireMid(label, len(bit_index), order, wire_label=qargs.pop(0)))
+            set_bit(bits[-1], BoxOnWireBot(label, len(bit_index), wire_label=qargs.pop(0)))
 
     def set_cl_multibox(self, creg, label, top_connect='┴'):
         """

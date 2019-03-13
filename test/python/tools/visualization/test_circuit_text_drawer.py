@@ -854,7 +854,7 @@ class TestTextDrawerGatesInCircuit(QiskitTestCase):
 class TestTextDrawerMultiQGates(QiskitTestCase):
     """ Gates impling multiple qubits."""
 
-    def test_2gate(self):
+    def test_2Qgate(self):
         """ 2Q no params. """
         expected = '\n'.join(["        ┌───────┐",
                               "q_1: |0>┤0      ├",
@@ -870,7 +870,7 @@ class TestTextDrawerMultiQGates(QiskitTestCase):
 
         self.assertEqual(str(_text_circuit_drawer(circuit, reverse_bits=True)), expected)
 
-    def test_2gate_cross_wires(self):
+    def test_2Qgate_cross_wires(self):
         """ 2Q no params, with cross wires """
         expected = '\n'.join(["        ┌───────┐",
                               "q_1: |0>┤1      ├",
@@ -886,8 +886,26 @@ class TestTextDrawerMultiQGates(QiskitTestCase):
 
         self.assertEqual(str(_text_circuit_drawer(circuit, reverse_bits=True)), expected)
 
-    def test_3gate_nottogether(self):
-        """ 3Q that are not together """
+    def test_3Qgate_cross_wires(self):
+        """ 3Q no params, with cross wires """
+        expected = '\n'.join(["        ┌─────────┐",
+                              "q_2: |0>┤1        ├",
+                              "        │         │",
+                              "q_1: |0>┤2 threeQ ├",
+                              "        │         │",
+                              "q_0: |0>┤0        ├",
+                              "        └─────────┘"])
+
+        qr = QuantumRegister(3, 'q')
+        circuit = QuantumCircuit(qr)
+
+        my_gate3 = Gate(name='threeQ', num_qubits=3, params=[])
+        circuit.append(my_gate3, [qr[1], qr[2], qr[0]])
+
+        self.assertEqual(str(_text_circuit_drawer(circuit, reverse_bits=True)), expected)
+
+    def test_2Qgate_nottogether(self):
+        """ 2Q that are not together """
         expected = '\n'.join([''])
 
         qr = QuantumRegister(3, 'q')
