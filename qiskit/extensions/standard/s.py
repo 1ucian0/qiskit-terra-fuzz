@@ -48,7 +48,7 @@ class SGate(Gate):
 
 
 class SdgGate(Gate):
-    """Sdg=diag(1,-i) Clifford adjoin phase gate."""
+    """Sdg=diag(1,-i) Clifford adjoint phase gate."""
 
     def __init__(self, circ=None):
         """Create new Sdg gate."""

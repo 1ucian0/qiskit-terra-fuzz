@@ -886,6 +886,18 @@ class TestTextDrawerMultiQGates(QiskitTestCase):
 
         self.assertEqual(str(_text_circuit_drawer(circuit, reverse_bits=True)), expected)
 
+    def test_3gate_nottogether(self):
+        """ 3Q that are not together """
+        expected = '\n'.join([''])
+
+        qr = QuantumRegister(3, 'q')
+        circuit = QuantumCircuit(qr)
+
+        my_gate2 = Gate(name='twoQ', num_qubits=2, params=[])
+        circuit.append(my_gate2, [qr[0], qr[2]])
+
+        self.assertEqual(str(_text_circuit_drawer(circuit, reverse_bits=True)), expected)
+
 
 if __name__ == '__main__':
     unittest.main()
