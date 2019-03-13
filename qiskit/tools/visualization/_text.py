@@ -868,7 +868,7 @@ class Layer:
         if wire_type == "cl":
             bit_index = sorted([i for i, x in enumerate(self.cregs) if x in bits])
             bits.sort(key=self.cregs.index)
-            qargs = ['']*len(bits)
+            qargs = [''] * len(bits)
             set_bit = self.set_clbit
             BoxOnWire = BoxOnClWire
             BoxOnWireTop = BoxOnClWireTop
@@ -889,12 +889,13 @@ class Layer:
         if len(bit_index) == 1:
             set_bit(bits[0], BoxOnWire(label, top_connect=top_connect))
         else:
-            box_height = max(bit_index)-min(bit_index) + 1
-            set_bit(bits.pop(0), BoxOnWireTop(label, top_connect=top_connect, wire_label=qargs.pop(0)))
-            for order, bit_i in enumerate(range(min(bit_index)+1, max(bit_index))):
+            box_height = max(bit_index) - min(bit_index) + 1
+            set_bit(bits.pop(0),
+                    BoxOnWireTop(label, top_connect=top_connect, wire_label=qargs.pop(0)))
+            for order, bit_i in enumerate(range(min(bit_index) + 1, max(bit_index))):
                 if bit_i in bit_index:
                     named_bit = bits.pop(0)
-                    wire_label=qargs.pop(0)
+                    wire_label = qargs.pop(0)
                 else:
                     named_bit = (self.qregs + self.cregs)[bit_i]
                     wire_label = ''
