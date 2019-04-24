@@ -10,6 +10,8 @@ from functools import partial
 from collections import OrderedDict
 from qiskit.dagcircuit import DAGCircuit
 from qiskit.converters import circuit_to_dag, dag_to_circuit
+from qiskit.tools.parallel import parallel_map
+from qiskit.circuit import QuantumCircuit
 from .propertyset import PropertySet
 from .basepasses import BasePass
 from .fencedobjs import FencedPropertySet, FencedDAGCircuit
@@ -129,18 +131,35 @@ class PassManager():
                 dag = self._do_pass(pass_, dag, passset.options)
         return dag
 
-    def run(self, circuit):
+    def run(self, circuits):
+        """Run all the passes on the circuits
+        Args:
+            circuits (QuantumCircuit or list[QuantumCircuit]): circuits to
+                     transpile with the PassManager.
+        Returns:
+            QuantumCircuits: Transformed circuits.
+        """
+        return_form_is_single = False
+        if isinstance(circuits, QuantumCircuit):
+            circuits = [circuits]
+            return_form_is_single = True
+
+        parallel_map(self._run_in_parallel, circuits)
+
+        if return_form_is_single:
+            return circuits[0]
+        return circuits
+
+    def _run_in_parallel(self, circuit):
         """Run all the passes on a QuantumCircuit
         Args:
-            circuit (QuantumCircuit): circuit to transform via all the registered passes
+            circuits (QuantumCircuit or list[QuantumCircuit]): circuits to
+                     transpile with the PassManager.
         Returns:
             QuantumCircuit: Transformed circuit.
         """
         dag = circuit_to_dag(circuit)
-        for passset in self.working_list:
-            for pass_ in passset:
-                dag = self._do_pass(pass_, dag, passset.options)
-        circuit = dag_to_circuit(dag)
+        circuit = dag_to_circuit(self.run_passes(dag))
         return circuit
 
     def _do_pass(self, pass_, dag, options):
