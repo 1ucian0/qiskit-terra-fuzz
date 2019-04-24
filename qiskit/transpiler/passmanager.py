@@ -144,17 +144,16 @@ class PassManager():
             circuits = [circuits]
             return_form_is_single = True
 
-        parallel_map(self._run_in_parallel, circuits)
+        parallel_map(self._run_single_circuit, circuits)
 
         if return_form_is_single:
             return circuits[0]
         return circuits
 
-    def _run_in_parallel(self, circuit):
+    def _run_single_circuit(self, circuit):
         """Run all the passes on a QuantumCircuit
         Args:
-            circuits (QuantumCircuit or list[QuantumCircuit]): circuits to
-                     transpile with the PassManager.
+            circuit (QuantumCircuit): circuits to transpile with the PassManager.
         Returns:
             QuantumCircuit: Transformed circuit.
         """
