@@ -144,7 +144,7 @@ class PassManager():
             circuits = [circuits]
             return_form_is_single = True
 
-        parallel_map(self._run_single_circuit, circuits)
+        circuits = parallel_map(self._run_single_circuit, circuits)
 
         if return_form_is_single:
             return circuits[0]

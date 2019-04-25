@@ -62,7 +62,7 @@ class TestPassManagerRun(QiskitTestCase):
                                            coupling_map=CouplingMap(coupling_map),
                                            initial_layout=Layout.from_tuplelist(initial_layout),
                                            skip_numeric_passes=False,
-                                           seed_mapper=None)
+                                           seed_mapper=42)
         new_circuit = pass_manager._run_single_circuit(circuit)
 
         for gate, qargs, _ in new_circuit.data:
