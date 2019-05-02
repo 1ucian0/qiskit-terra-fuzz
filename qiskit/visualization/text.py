@@ -817,7 +817,7 @@ class TextDrawing():
 
         elif len(instruction.qargs) >= 2 and not instruction.cargs:
             # multiple qubit gate
-            label = instruction.name
+            label = instruction.op.label or instruction.name
             params = TextDrawing.params_for_label(instruction)
             if params:
                 label += "(%s)" % ','.join(params)

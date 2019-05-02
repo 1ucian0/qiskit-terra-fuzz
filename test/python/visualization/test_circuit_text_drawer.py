@@ -32,7 +32,6 @@ from qiskit.quantum_info.operators import SuperOp
 from qiskit.extensions import XGate, UnitaryGate
 
 
-
 class TestTextDrawerElement(QiskitTestCase):
     """ Draw each element"""
 
@@ -1009,6 +1008,24 @@ class TestTextDrawerMultiQGates(QiskitTestCase):
         qc = QuantumCircuit(qr)
 
         qc.append(random_unitary(4, seed=42), [qr[0], qr[3]])
+
+        self.assertEqual(str(_text_circuit_drawer(qc)), expected)
+
+    def test_unitary_label(self):
+        """ Unitary with label"""
+        expected = '\n'.join(["         ┌──────────┐",
+                              "q0_0: |0>┤0         ├",
+                              "         │  a Label │",
+                              "q0_1: |0>┤1         ├",
+                              "         └──────────┘"])
+
+        qr = QuantumRegister(2)
+        qc = QuantumCircuit(qr)
+        sigmax = numpy.array([[0, 1], [1, 0]])
+        sigmay = numpy.array([[0, -1j], [1j, 0]])
+        matrix = numpy.kron(sigmax, sigmay)
+
+        qc.append(UnitaryGate(matrix, label='a Label'), [qr[0], qr[1]])
 
         self.assertEqual(str(_text_circuit_drawer(qc)), expected)
 
