@@ -641,7 +641,10 @@ class TextDrawing():
     @staticmethod
     def label_for_box(instruction):
         """ Creates the label for a box."""
-        label = instruction.name.capitalize()
+        if hasattr(instruction.op, 'label') and instruction.op.label:
+            label = instruction.op.label
+        else:
+            label = instruction.name.capitalize()
         params = TextDrawing.params_for_label(instruction)
         if params:
             label += "(%s)" % ','.join(params)

@@ -29,6 +29,8 @@ from qiskit.test import QiskitTestCase
 from qiskit.circuit import Gate, Parameter
 from qiskit.quantum_info.random import random_unitary
 from qiskit.quantum_info.operators import SuperOp
+from qiskit.extensions import XGate, UnitaryGate
+
 
 
 class TestTextDrawerElement(QiskitTestCase):
@@ -445,7 +447,7 @@ class TestTextDrawerGatesInCircuit(QiskitTestCase):
         self.assertEqual(str(_text_circuit_drawer(circuit, reverse_bits=True)), expected)
 
     def test_text_ccx(self):
-        """ cx drawing. """
+        """ ccx drawing. """
         expected = '\n'.join(["                  ┌───┐",
                               "q_0: |0>──■────■──┤ X ├",
                               "          │  ┌─┴─┐└─┬─┘",
@@ -458,6 +460,26 @@ class TestTextDrawerGatesInCircuit(QiskitTestCase):
         circuit.ccx(qr[0], qr[1], qr[2])
         circuit.ccx(qr[2], qr[0], qr[1])
         circuit.ccx(qr[2], qr[1], qr[0])
+        self.assertEqual(str(_text_circuit_drawer(circuit)), expected)
+
+    def test_text_x(self):
+        """ x drawing (via append). """
+        expected = '\n'.join(["        ┌───┐",
+                              "q_0: |0>┤ X ├",
+                              "        └───┘"])
+        qr = QuantumRegister(1, 'q')
+        circuit = QuantumCircuit(qr)
+        circuit.append(XGate(), [qr[0]])
+        self.assertEqual(str(_text_circuit_drawer(circuit)), expected)
+
+    def test_text_x_label(self):
+        """ x drawing (via append). """
+        expected = '\n'.join(["        ┌───────┐",
+                              "q_0: |0>┤ alt-X ├",
+                              "        └───────┘"])
+        qr = QuantumRegister(1, 'q')
+        circuit = QuantumCircuit(qr)
+        circuit.append(XGate(label='alt-X'), [qr[0]])
         self.assertEqual(str(_text_circuit_drawer(circuit)), expected)
 
     def test_text_reset(self):
