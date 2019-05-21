@@ -1,4 +1,6 @@
 base: ubuntu:16.04
+environment:
+    - PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/appuser/fuzzbuzz/afl'
 setup:
     - sudo apt-get update
     - sudo apt-get install -y python3-setuptools python3-dev build-essential libssl-dev 
