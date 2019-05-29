@@ -14,4 +14,4 @@ targets:
     harness:
       function: optmization_levels
       file: test/fuzz/optimization_levels.py
-  timeout: 100000
+    timeout: 100000
