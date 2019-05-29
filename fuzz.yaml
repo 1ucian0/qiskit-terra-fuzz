@@ -4,8 +4,8 @@ setup:
     - sudo apt-get install -y python3-setuptools python3-dev build-essential libssl-dev 
     - PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/appuser/fuzzbuzz/afl' pip3 install -U -r requirements.txt
     - PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/appuser/fuzzbuzz/afl' pip3 install -U -r requirements-dev.txt -c constraints.txt
-    - pip3 install -e .
-    - pip3 install "qiskit-ibmq-provider" -c constraints.txt
+    - PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/appuser/fuzzbuzz/afl' pip3 install -e .
+    - PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/appuser/fuzzbuzz/afl' pip3 install "qiskit-ibmq-provider" -c constraints.txt
     - PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/appuser/fuzzbuzz/afl' python setup.py build_ext --inplace
 language: python
 version: "3.6"
